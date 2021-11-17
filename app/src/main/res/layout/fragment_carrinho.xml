@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnCheckout"
         android:layout_width="161dp"
         android:layout_height="51dp"
         android:layout_marginTop="568dp"
@@ -33,5 +33,19 @@
         app:layout_constraintHorizontal_bias="0.936"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtPreco"
+        android:layout_width="116dp"
+        android:layout_height="37dp"
+        android:text="Total: 40€"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.122"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvCarrinho"
+        app:layout_constraintVertical_bias="0.278" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
