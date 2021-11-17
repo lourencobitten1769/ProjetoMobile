@@ -6,7 +6,10 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.projetomobile.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
