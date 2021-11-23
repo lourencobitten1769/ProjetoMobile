@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.lang.reflect.Array;
@@ -23,8 +24,10 @@ import java.util.ArrayList;
 public class CarrinhoFragment extends Fragment {
 
     private RecyclerView mRecyclerCarrinho;
-    private RecyclerView.Adapter adapterCarrinho;
+    private AdapterCarrinho adapterCarrinho;
     private RecyclerView.LayoutManager layoutManager;
+    public ArrayList<ItemCarrinho> itemCarrinhos=new ArrayList<>();
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,6 +71,8 @@ public class CarrinhoFragment extends Fragment {
 
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,7 +80,6 @@ public class CarrinhoFragment extends Fragment {
         View v= inflater.inflate(R.layout.fragment_carrinho,container,false);
 
 
-        ArrayList<ItemCarrinho> itemCarrinhos=new ArrayList<>();
         itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
         itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
         itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
@@ -100,6 +104,32 @@ public class CarrinhoFragment extends Fragment {
         mRecyclerCarrinho.setLayoutManager(layoutManager);
         mRecyclerCarrinho.setAdapter(adapterCarrinho);
 
+
+        adapterCarrinho.setOnItemClickListener(new AdapterCarrinho.OnItemClickListener() {
+            @Override
+            public void onItemCLick(int position) {
+                changeItem(position,"Clicked");
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+
+                CarrinhoFragment.this.onDeleteClick(position);
+            }
+        });
+
         return v;
+    }
+    public void changeItem(int position,String text){
+        itemCarrinhos.get(position).changeText("Cllicked");
+        adapterCarrinho.notifyItemChanged(position);
+    }
+
+
+
+    public void onDeleteClick(int position){
+
+        itemCarrinhos.remove(position);
+        adapterCarrinho.notifyItemRemoved(position);
     }
 }

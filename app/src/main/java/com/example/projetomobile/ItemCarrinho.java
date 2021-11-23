@@ -16,6 +16,11 @@ class ItemCarrinho {
 
     }
 
+    public void changeText(String text)
+    {
+        mTitulo=text;
+    }
+
     public int getmImagem(){
         return mImagem;
     }

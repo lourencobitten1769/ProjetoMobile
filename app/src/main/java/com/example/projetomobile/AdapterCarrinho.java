@@ -15,17 +15,56 @@ import java.util.ArrayList;
 
 class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.CarrinhoViewHolder> {
     private final ArrayList<ItemCarrinho> mCarrinhoList;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener{
+        void onItemCLick(int position);
+        void onDeleteClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mListener=listener;
+    }
 
     public static class CarrinhoViewHolder extends RecyclerView.ViewHolder {
         public ImageView mImagem;
         public TextView mTitulo;
         public TextView mPreco;
+        public ImageView mDeleteImagem;
 
-        public CarrinhoViewHolder(@NonNull View itemView) {
+        public CarrinhoViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             mImagem=itemView.findViewById(R.id.imageProduto);
             mTitulo=itemView.findViewById(R.id.txtNome);
             mPreco=itemView.findViewById(R.id.txtPreco);
+            mDeleteImagem=itemView.findViewById(R.id.imageDelete);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(listener != null){
+                        int position= getAdapterPosition();
+                        if(position !=RecyclerView.NO_POSITION){
+                            listener.onItemCLick(position);
+                        }
+                    }
+
+                }
+            });
+
+            mDeleteImagem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(listener != null){
+                        int position= getAdapterPosition();
+                        if(position !=RecyclerView.NO_POSITION){
+                            listener.onDeleteClick(position);
+                        }
+                    }
+                }
+            });
+
         }
     }
 
@@ -40,7 +79,7 @@ class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.CarrinhoViewH
     @Override
     public CarrinhoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_carrinho,parent,false);
-        CarrinhoViewHolder carrinhoViewHolder= new CarrinhoViewHolder(v);
+        CarrinhoViewHolder carrinhoViewHolder= new CarrinhoViewHolder(v, mListener);
         return carrinhoViewHolder;
 
     }
