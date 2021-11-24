@@ -2,8 +2,10 @@ package com.example.projetomobile;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +29,7 @@ public class CarrinhoFragment extends Fragment {
     private AdapterCarrinho adapterCarrinho;
     private RecyclerView.LayoutManager layoutManager;
     public ArrayList<ItemCarrinho> itemCarrinhos=new ArrayList<>();
+
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -86,12 +89,6 @@ public class CarrinhoFragment extends Fragment {
         itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
         itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
         itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
 
         mRecyclerCarrinho=v.findViewById(R.id.rvCarrinho);
         mRecyclerCarrinho.setHasFixedSize(true);
@@ -118,10 +115,32 @@ public class CarrinhoFragment extends Fragment {
             }
         });
 
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack= new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                itemCarrinhos.remove(viewHolder.getAdapterPosition());
+                adapterCarrinho.notifyDataSetChanged();
+
+
+
+            }
+        };
+
+        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(mRecyclerCarrinho);
+
+
+
         return v;
     }
     public void changeItem(int position,String text){
-        itemCarrinhos.get(position).changeText("Cllicked");
+        itemCarrinhos.get(position).changeText("Clicked");
         adapterCarrinho.notifyItemChanged(position);
     }
 
