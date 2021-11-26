@@ -9,10 +9,11 @@
 
 
     <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="359dp"
         android:layout_height="423dp"
         android:layout_marginStart="-10dp"
-        android:layout_marginTop="-15dp"
+        android:layout_marginTop="-17dp"
         android:background="@drawable/rounded_radio_group_style"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,6 +32,7 @@
                 android:layout_height="49dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/rounded_button_style"
+                android:clickable="true"
                 android:text="Editar Perfil"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.94"
@@ -38,7 +40,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imgPerfilUser"
                 android:layout_width="88dp"
                 android:layout_height="85dp"
                 android:layout_marginTop="24dp"
@@ -103,6 +105,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:editable="false"
                     android:hint="User"
                     android:textColor="@color/black"
                     tools:ignore="TouchTargetSizeCheck" />
@@ -123,6 +127,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:editable="false"
                     android:hint="Email"
                     tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -142,11 +147,38 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:editable="false"
                     android:hint="Morada"
                     tools:ignore="TouchTargetSizeCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RadioGroup>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvHistorico"
+        android:layout_width="344dp"
+        android:layout_height="163dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="460dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.559"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblHistorico"
+        android:layout_width="98dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="428dp"
+        android:text="Histórico"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.458"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

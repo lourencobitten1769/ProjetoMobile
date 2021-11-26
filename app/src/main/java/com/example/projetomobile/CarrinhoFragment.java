@@ -105,7 +105,7 @@ public class CarrinhoFragment extends Fragment {
         adapterCarrinho.setOnItemClickListener(new AdapterCarrinho.OnItemClickListener() {
             @Override
             public void onItemCLick(int position) {
-                changeItem(position,"Clicked");
+
             }
 
             @Override
@@ -138,10 +138,6 @@ public class CarrinhoFragment extends Fragment {
 
 
         return v;
-    }
-    public void changeItem(int position,String text){
-        itemCarrinhos.get(position).changeText("Clicked");
-        adapterCarrinho.notifyItemChanged(position);
     }
 
 

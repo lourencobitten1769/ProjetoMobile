@@ -9,8 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.CarrinhoViewHolder> {
@@ -34,9 +32,9 @@ class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.CarrinhoViewH
 
         public CarrinhoViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
-            mImagem=itemView.findViewById(R.id.imageProduto);
-            mTitulo=itemView.findViewById(R.id.txtNome);
-            mPreco=itemView.findViewById(R.id.txtPreco);
+            mImagem=itemView.findViewById(R.id.imageHProduto);
+            mTitulo=itemView.findViewById(R.id.txtHData);
+            mPreco=itemView.findViewById(R.id.txtHPreco);
             mDeleteImagem=itemView.findViewById(R.id.imageDelete);
 
             itemView.setOnClickListener(new View.OnClickListener() {

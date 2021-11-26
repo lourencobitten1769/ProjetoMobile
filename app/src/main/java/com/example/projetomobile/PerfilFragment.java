@@ -1,12 +1,19 @@
 package com.example.projetomobile;
 
+import android.content.ClipData;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +21,11 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class PerfilFragment extends Fragment {
+
+    private RecyclerView mRecyclerHistorico;
+    private AdapterHistorico adapterHistorico;
+    private RecyclerView.LayoutManager layoutManager;
+    public ArrayList<ItemHistorico> itemHistoricos=new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +71,23 @@ public class PerfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perfil, container, false);
+        View v= inflater.inflate(R.layout.fragment_perfil,container,false);
+
+        itemHistoricos.add(new ItemHistorico(R.drawable.house,"11/12/2021","60€"));
+        itemHistoricos.add(new ItemHistorico(R.drawable.house,"02/06/2005","40€"));
+        itemHistoricos.add(new ItemHistorico(R.drawable.house,"11/07/2018","22€"));
+
+        mRecyclerHistorico=v.findViewById(R.id.rvHistorico);
+        mRecyclerHistorico.setHasFixedSize(true);
+        layoutManager=new LinearLayoutManager(getContext());
+        adapterHistorico= new AdapterHistorico(itemHistoricos);
+        mRecyclerHistorico.scheduleLayoutAnimation();
+        mRecyclerHistorico.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
+
+        mRecyclerHistorico.setLayoutManager(layoutManager);
+        mRecyclerHistorico.setAdapter(adapterHistorico);
+
+
+        return v;
     }
 }

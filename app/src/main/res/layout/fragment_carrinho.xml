@@ -44,7 +44,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtPreco"
+        android:id="@+id/txtHPreco"
         android:layout_width="116dp"
         android:layout_height="37dp"
         android:text="Total: 40€"
