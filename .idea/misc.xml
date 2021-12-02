@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/ProjetoMobile/app/src/main/res/layout/fragment_carrinho.xml" value="0.24592391304347827" />
+        <entry key="..\:/Android/ProjetoMobile/app/src/main/res/layout/fragment_inicial.xml" value="0.24592391304347827" />
+        <entry key="..\:/Android/ProjetoMobile/app/src/main/res/layout/item_carrinho.xml" value="0.25" />
+        <entry key="..\:/Android/ProjetoMobile/app/src/main/res/layout/item_type.xml" value="0.25" />
         <entry key="..\:/Users/manin/AndroidStudioProjects/ProjetoMobile/app/src/main/res/drawable/et_style.xml" value="0.290625" />
         <entry key="..\:/Users/manin/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/Users/manin/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/activity_register.xml" value="0.2" />
