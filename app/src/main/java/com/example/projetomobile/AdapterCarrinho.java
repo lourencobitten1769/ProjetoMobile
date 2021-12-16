@@ -15,6 +15,9 @@ class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.CarrinhoViewH
     private final ArrayList<ItemCarrinho> mCarrinhoList;
     private OnItemClickListener mListener;
 
+
+
+
     public interface OnItemClickListener{
         void onItemCLick(int position);
         void onDeleteClick(int position);

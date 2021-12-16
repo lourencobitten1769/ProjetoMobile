@@ -3,14 +3,30 @@ package com.example.projetomobile;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,8 +37,9 @@ public class InicialFragment extends Fragment {
 
 
     private AdapterTypeHoriz adapterTypeHoriz;
+    private AdapterProdutos adapterProdutos;
     private RecyclerView.LayoutManager layoutManager;
-
+    ArrayList<Product> products=new ArrayList<>();
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -35,6 +52,12 @@ public class InicialFragment extends Fragment {
     private String mParam2;
     private RecyclerView horizontal_recycler;
     public ArrayList<ItemHorizontal> itemHorizontals;
+
+    private RecyclerView rv_produtos;
+
+    List<String> titles;
+    List<Integer> images;
+
 
 
 
@@ -71,6 +94,8 @@ public class InicialFragment extends Fragment {
 
 
 
+
+
     }
 
     @Override
@@ -80,6 +105,29 @@ public class InicialFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_inicial, container, false);
         horizontal_recycler=view.findViewById(R.id.horizontal_recycler);
         horizontal_recycler.setLayoutManager(new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        //RecyclerViewProdutos
+        rv_produtos=view.findViewById(R.id.rv_produtos);
+        titles= new ArrayList<>();
+        images= new ArrayList<>();
+
+        titles.add("FirstItem");
+        titles.add("SecondItem");
+        titles.add("ThirdItem");
+        titles.add("FourthItem");
+
+        images.add(R.drawable.ic_baseline_home_24);
+        images.add(R.drawable.ic_baseline_home_24);
+        images.add(R.drawable.ic_baseline_home_24);
+        images.add(R.drawable.ic_baseline_home_24);
+
+        adapterProdutos= new AdapterProdutos(getContext(),titles,images);
+
+        GridLayoutManager gridLayoutManager= new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false);
+        rv_produtos.setLayoutManager(gridLayoutManager);
+        rv_produtos.setAdapter(adapterProdutos);
+
+
 
         //Create String Array
         String[] itemType = {"Carros", "Roupas", "Animais", "Bebé", "Informática"};
