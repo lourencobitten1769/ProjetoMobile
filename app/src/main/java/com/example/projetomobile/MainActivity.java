@@ -7,6 +7,12 @@ import androidx.fragment.app.Fragment;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class MainActivity extends AppCompatActivity {
 
     MeowBottomNavigation bottomNavigation;
@@ -65,6 +71,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        MqttClient client;
+        try {
+            client = new MqttClient("tcp://localhost:1884",MqttClient.generateClientId());
+            client.setCallback( new MosquittoCallBack() );
+            client.connect();
+            client.subscribe("INSERT");
+            client.subscribe("UPDATE");
+            client.subscribe("DELETE");
+        } catch (MqttException ex) {
+            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
