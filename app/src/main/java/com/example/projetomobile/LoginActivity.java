@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.example.projetomobile.databinding.ActivityLoginBinding;
 
+
 public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;

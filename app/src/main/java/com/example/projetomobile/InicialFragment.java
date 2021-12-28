@@ -115,7 +115,15 @@ public class InicialFragment extends Fragment {
         titles.add("SecondItem");
         titles.add("ThirdItem");
         titles.add("FourthItem");
+        titles.add("FirstItem");
+        titles.add("SecondItem");
+        titles.add("ThirdItem");
+        titles.add("FourthItem");
 
+        images.add(R.drawable.ic_baseline_home_24);
+        images.add(R.drawable.ic_baseline_home_24);
+        images.add(R.drawable.ic_baseline_home_24);
+        images.add(R.drawable.ic_baseline_home_24);
         images.add(R.drawable.ic_baseline_home_24);
         images.add(R.drawable.ic_baseline_home_24);
         images.add(R.drawable.ic_baseline_home_24);
@@ -128,8 +136,6 @@ public class InicialFragment extends Fragment {
         rv_produtos.setAdapter(adapterProdutos);
 
 
-
-        //Create String Array
         String[] itemType = {"Carros", "Roupas", "Animais", "Bebé", "Informática"};
 
         itemHorizontals=new ArrayList<>();
