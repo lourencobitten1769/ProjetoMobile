@@ -34,23 +34,26 @@
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="167dp"
+        android:layout_height="39dp"
         android:layout_marginTop="40dp"
         android:background="@drawable/et_style"
         android:text="Login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/edtPassword"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <TextView
         android:id="@+id/txtRegistar"
-        android:layout_width="87dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="28dp"
-        android:text="Registar-se"
+        android:layout_width="280dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="20dp"
+        android:text="Ainda não possui conta? Registe-se agora"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
