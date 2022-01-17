@@ -10,19 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ProdutosViewholder> {
 
-    List<String> titles;
-    List<Integer> images;
+    List<Product> products;
     Context context;
     LayoutInflater inflater;
 
-    public AdapterProdutos(Context context,List<String> titles, List<Integer> images){
-        this.titles=titles;
-        this.images=images;
+    public AdapterProdutos(Context context,List<Product> products){
+        this.products=products;
         this.inflater = LayoutInflater.from(context);
     }
 
@@ -35,13 +32,13 @@ class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ProdutosViewh
 
     @Override
     public void onBindViewHolder(@NonNull ProdutosViewholder holder, int position) {
-        holder.title.setText(titles.get(position));
-        holder.gridImage.setImageResource(images.get(position));
+        holder.title.setText(products.get(position).getProduct_name());
+        //holder.gridImage.setImageResource(products.get(position).getImage());
     }
 
     @Override
     public int getItemCount() {
-        return titles.size();
+        return products.size();
     }
 
     public static class ProdutosViewholder extends RecyclerView.ViewHolder{

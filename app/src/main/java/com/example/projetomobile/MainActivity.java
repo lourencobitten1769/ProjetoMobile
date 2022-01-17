@@ -7,9 +7,9 @@ import androidx.fragment.app.Fragment;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
+/*import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
-
+*/
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        MqttClient client;
+        /*MqttClient client;
         try {
             client = new MqttClient("tcp://localhost:1884",MqttClient.generateClientId());
             client.setCallback( new MosquittoCallBack() );
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             client.subscribe("DELETE");
         } catch (MqttException ex) {
             Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
 
     }
 

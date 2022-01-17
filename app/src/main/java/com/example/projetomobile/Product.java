@@ -15,6 +15,9 @@ public class Product {
         this.image = image;
     }
 
+    public Product() {
+    }
+
     public int getProduct_id() {
         return product_id;
     }

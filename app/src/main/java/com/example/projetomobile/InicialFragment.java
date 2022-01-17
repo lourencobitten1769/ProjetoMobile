@@ -1,29 +1,23 @@
 package com.example.projetomobile;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +33,7 @@ public class InicialFragment extends Fragment {
     private AdapterTypeHoriz adapterTypeHoriz;
     private AdapterProdutos adapterProdutos;
     private RecyclerView.LayoutManager layoutManager;
-    ArrayList<Product> products=new ArrayList<>();
+    List<Product> products=new ArrayList<>();
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -55,8 +49,6 @@ public class InicialFragment extends Fragment {
 
     private RecyclerView rv_produtos;
 
-    List<String> titles;
-    List<Integer> images;
 
 
 
@@ -92,10 +84,6 @@ public class InicialFragment extends Fragment {
         }
 
 
-
-
-
-
     }
 
     @Override
@@ -106,30 +94,75 @@ public class InicialFragment extends Fragment {
         horizontal_recycler=view.findViewById(R.id.horizontal_recycler);
         horizontal_recycler.setLayoutManager(new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
+
+        DBHelper dbHelper= new DBHelper(getActivity());
+        RequestQueue requestQueue= Volley.newRequestQueue(getActivity());
+        String url ="http://10.0.2.2/projetoweb/backend/web/index.php/api/product";
+
         //RecyclerViewProdutos
         rv_produtos=view.findViewById(R.id.rv_produtos);
-        titles= new ArrayList<>();
-        images= new ArrayList<>();
+        products= new ArrayList<>();
 
-        titles.add("FirstItem");
-        titles.add("SecondItem");
-        titles.add("ThirdItem");
-        titles.add("FourthItem");
-        titles.add("FirstItem");
-        titles.add("SecondItem");
-        titles.add("ThirdItem");
-        titles.add("FourthItem");
 
-        images.add(R.drawable.ic_baseline_home_24);
-        images.add(R.drawable.ic_baseline_home_24);
-        images.add(R.drawable.ic_baseline_home_24);
-        images.add(R.drawable.ic_baseline_home_24);
-        images.add(R.drawable.ic_baseline_home_24);
-        images.add(R.drawable.ic_baseline_home_24);
-        images.add(R.drawable.ic_baseline_home_24);
-        images.add(R.drawable.ic_baseline_home_24);
 
-        adapterProdutos= new AdapterProdutos(getContext(),titles,images);
+        /*JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    Log.d("entrou","entrou");
+                    for (int i=0;i<response.length();i++){
+                        JSONObject jsonObject = response.getJSONObject(i);
+
+                        Product product= new Product();
+                        product.setProduct_id(jsonObject.getInt("product_id"));
+                        product.setPrice(jsonObject.getInt("price"));
+                        if(jsonObject.isNull("size")){
+
+                        }
+                        else {
+                            product.setStock(jsonObject.getInt("size"));
+                        }
+                        product.setStock(jsonObject.getInt("stock"));
+                        product.setCategory_id(jsonObject.getInt("category_id"));
+                        product.setProduct_name(jsonObject.getString("product_name"));
+                        product.setDescription(jsonObject.getString("description"));
+                        product.setImage(jsonObject.getString("image"));
+
+                        dbHelper.adicionarProduct(product);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("erro",error.toString());
+            }
+        });
+
+        requestQueue.add(jsonArrayRequest);
+*/
+
+        products.addAll(dbHelper.getAllProducts());
+
+        url="http://localhost/projetoweb/backend/web/index.php/api/category";
+
+        JsonArrayRequest jsonArrayRequest=new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+
+
+        adapterProdutos= new AdapterProdutos(getContext(),products);
 
         GridLayoutManager gridLayoutManager= new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false);
         rv_produtos.setLayoutManager(gridLayoutManager);
@@ -150,6 +183,8 @@ public class InicialFragment extends Fragment {
 
         return view;
     }
+
+
 }
 
 
