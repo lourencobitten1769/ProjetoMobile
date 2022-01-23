@@ -20,7 +20,7 @@
             android:id="@+id/ivProduto"
             android:layout_width="94dp"
             android:layout_height="85dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -30,38 +30,25 @@
             android:id="@+id/txtProduto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
             android:text="Nome Produto"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.521"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivProduto" />
-
-        <Button
-            android:id="@+id/btnComprar"
-            android:layout_width="106dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="156dp"
-            android:background="@drawable/rounded_button_buy"
-            android:text="Comprar"
-            android:textColor="@color/black"
-            android:textSize="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.444"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TouchTargetSizeCheck" />
 
         <TextView
             android:id="@+id/txtPrecoProduto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="130dp"
+            android:layout_marginTop="164dp"
             android:text="Preço"
             android:textColor="@color/black"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.504"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

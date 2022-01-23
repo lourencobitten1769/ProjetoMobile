@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/ivProduto"
-        android:layout_width="288dp"
-        android:layout_height="288dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="52dp"
+        android:layout_width="254dp"
+        android:layout_height="228dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="68dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_person_24" />
@@ -20,17 +20,17 @@
         android:id="@+id/txtProduto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="124dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
-        android:textSize="34sp"
+        android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivProduto" />
 
     <TextView
         android:id="@+id/txtDescricao"
-        android:layout_width="297dp"
-        android:layout_height="243dp"
+        android:layout_width="298dp"
+        android:layout_height="177dp"
         android:layout_marginStart="52dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtProduto" />
 
     <Spinner
-        android:id="@+id/spinnerTamanho"
+        android:id="@+id/spinnerStock"
         android:layout_width="295dp"
         android:layout_height="48dp"
         android:layout_marginStart="52dp"
@@ -55,6 +55,6 @@
         android:layout_marginTop="24dp"
         android:text="Adicionar ao Carrinho"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerTamanho" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerStock" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

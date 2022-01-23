@@ -1,5 +1,6 @@
 package com.example.projetomobile;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,18 +9,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class AdapterTypeHoriz extends RecyclerView.Adapter<AdapterTypeHoriz.TypeViewHolder>{
-    private final ArrayList<ItemHorizontal> mItemHorizontals;
+    private final LinkedList<Category> mItemHorizontals;
     private OnItemClickListener mListener;
+    private Context context;
+    DBHelper dbHelper;
 
 
 
 
-    public AdapterTypeHoriz(ArrayList<ItemHorizontal> itemHorizontals) {
+    public AdapterTypeHoriz(LinkedList<Category> itemHorizontals,Context context,OnItemClickListener listener) {
         mItemHorizontals = itemHorizontals;
+        this.context=context;
+        dbHelper=new DBHelper(context);
+        mListener=listener;
     }
+
 
 
     public interface OnItemClickListener{
@@ -30,6 +37,7 @@ public class AdapterTypeHoriz extends RecyclerView.Adapter<AdapterTypeHoriz.Type
 
     public void setOnItemClickListener(AdapterTypeHoriz.OnItemClickListener listener){
         mListener= listener;
+
     }
 
     @NonNull
@@ -43,7 +51,7 @@ public class AdapterTypeHoriz extends RecyclerView.Adapter<AdapterTypeHoriz.Type
     @Override
     public void onBindViewHolder(@NonNull TypeViewHolder holder, int position) {
 
-        holder.txtType.setText(mItemHorizontals.get(position).getItemType());
+        holder.txtType.setText(mItemHorizontals.get(position).getCategory());
     }
 
 
@@ -55,23 +63,19 @@ public class AdapterTypeHoriz extends RecyclerView.Adapter<AdapterTypeHoriz.Type
 
 
     public class TypeViewHolder extends RecyclerView.ViewHolder {
+        OnItemClickListener listener;
         public TextView txtType;
 
         public TypeViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
+            this.listener=listener;
             txtType=itemView.findViewById(R.id.txtType);
-
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    if(listener != null){
-                        int position= getAdapterPosition();
-                        if(position !=RecyclerView.NO_POSITION){
-                            listener.onItemCLick(position);
-                        }
-                    }
+                    int position= getAdapterPosition();
+                    mListener.onItemCLick(position);
                 }
             });
 

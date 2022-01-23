@@ -1,22 +1,39 @@
 package com.example.projetomobile;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import java.lang.reflect.Array;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,8 +45,12 @@ public class CarrinhoFragment extends Fragment {
     private RecyclerView mRecyclerCarrinho;
     private AdapterCarrinho adapterCarrinho;
     private RecyclerView.LayoutManager layoutManager;
-    public ArrayList<ItemCarrinho> itemCarrinhos=new ArrayList<>();
-
+    public ArrayList<CartItem> itemCarrinhos=new ArrayList<>();
+    TextView txtTotal;
+    Button btnCheckout;
+    DBHelper dbHelper;
+    int total=0;
+    int ultimoid;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -80,28 +101,159 @@ public class CarrinhoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_carrinho,container,false);
+        View v = inflater.inflate(R.layout.fragment_carrinho, container, false);
+
+        User userLogado = (User) this.getArguments().getSerializable("user");
+
+        String url = "http://10.0.2.2/projetoweb/backend/web/index.php/api/cart";
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        dbHelper=new DBHelper(getActivity());
+
+        txtTotal=v.findViewById(R.id.txtHPreco);
+        btnCheckout=v.findViewById(R.id.btnCheckout);
 
 
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
-        itemCarrinhos.add(new ItemCarrinho(R.drawable.house,"Carro","40000€"));
+        if(LoginActivity.isInternetConnection(getActivity())){
+            dbHelper.removerAllCart();
+        }
 
-        mRecyclerCarrinho=v.findViewById(R.id.rvCarrinho);
-        mRecyclerCarrinho.setHasFixedSize(true);
-        layoutManager= new LinearLayoutManager(getContext());
-        adapterCarrinho=new AdapterCarrinho(itemCarrinhos);
-        mRecyclerCarrinho.scheduleLayoutAnimation();
-        mRecyclerCarrinho.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        CartItem cartItem = new CartItem();
+                        cartItem.setId(jsonObject.getInt("id"));
+                        cartItem.setProduct_id(jsonObject.getInt("product_id"));
+                        cartItem.setQuantity(jsonObject.getInt("quantity"));
+                        cartItem.setCreated_by(jsonObject.getInt("created_by"));
+                        dbHelper.adicionarCartItem(cartItem);
+
+                    }
+                    try {
+                        itemCarrinhos.addAll(dbHelper.getCartByUser(userLogado.getId()));
+                        mRecyclerCarrinho=v.findViewById(R.id.rvCarrinho);
+                        mRecyclerCarrinho.setHasFixedSize(true);
+                        layoutManager= new LinearLayoutManager(getContext());
+                        adapterCarrinho=new AdapterCarrinho(itemCarrinhos,getContext());
+                        mRecyclerCarrinho.scheduleLayoutAnimation();
+                        mRecyclerCarrinho.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
+                        mRecyclerCarrinho.setLayoutManager(layoutManager);
+                        mRecyclerCarrinho.setAdapter(adapterCarrinho);
+
+                        for (int i=0;i< itemCarrinhos.size();i++){
+                            Product product=dbHelper.getProductById(itemCarrinhos.get(i).getProduct_id());
+                            total=total + (product.getPrice()* itemCarrinhos.get(i).getQuantity());
+                        }
+
+                        txtTotal.setText("Total: " + total + "€");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("erro",error.toString());
+            }
+        });
+
+        requestQueue.add(jsonArrayRequest);
 
 
-        mRecyclerCarrinho.setLayoutManager(layoutManager);
-        mRecyclerCarrinho.setAdapter(adapterCarrinho);
 
 
+
+
+
+
+
+        btnCheckout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2/projetoweb/backend/web/index.php/api/purchase", new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("purchase","Purchase add Successfully");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String,String> map= new HashMap<>();
+                        map.put("total_price", String.valueOf(total));
+                        Date date=new Date();
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        System.out.println(formatter.format(date));
+                        map.put("date",formatter.format(date));
+                        map.put("user_id", String.valueOf(userLogado.getId()));
+                        return map;
+                    }
+                };
+
+                RequestQueue requestQueueAddPurchase= Volley.newRequestQueue(getContext());
+                requestQueueAddPurchase.add(stringRequest);
+
+                JsonObjectRequest jsonObjectRequestLastPurchase= new JsonObjectRequest(Request.Method.GET, "http://10.0.2.2/projetoweb/backend/web/index.php/api/purchase/lastpurchase", null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.d("ultimoid", String.valueOf(response.getInt("purchase_id")));
+                            ultimoid=response.getInt("purchase_id");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+                RequestQueue requestQueueLastPurchase= Volley.newRequestQueue(getContext());
+                requestQueueLastPurchase.add(jsonObjectRequestLastPurchase);
+
+
+                for (int k=0;k< itemCarrinhos.size();k++){
+                    int finalK = k;
+                    StringRequest stringRequestProductsPurchases= new StringRequest(Request.Method.POST, "http://10.0.2.2/projetoweb/backend/web/index.php/api/productspurchases", new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("productPurchase","ProductPurchase added successfully");
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String,String> map= new HashMap<>();
+                            map.put("product_id", String.valueOf(itemCarrinhos.get(finalK).getProduct_id()));
+                            map.put("purchase_id", String.valueOf(ultimoid));
+                            map.put("quantity",String.valueOf(itemCarrinhos.get(finalK).getQuantity()));
+                            return map;
+                        }
+                    };
+
+                    RequestQueue requestQueueAddProductsPurchases=Volley.newRequestQueue(getContext());
+                    requestQueueAddProductsPurchases.add(stringRequestProductsPurchases);
+
+                }
+
+            }
+        });
+/*
         adapterCarrinho.setOnItemClickListener(new AdapterCarrinho.OnItemClickListener() {
             @Override
             public void onItemCLick(int position) {
@@ -136,6 +288,8 @@ public class CarrinhoFragment extends Fragment {
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(mRecyclerCarrinho);
 
 
+*/
+
 
         return v;
     }
@@ -147,4 +301,6 @@ public class CarrinhoFragment extends Fragment {
         itemCarrinhos.remove(position);
         adapterCarrinho.notifyItemRemoved(position);
     }
+
+
 }

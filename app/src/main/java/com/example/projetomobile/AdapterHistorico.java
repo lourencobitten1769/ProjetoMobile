@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 class AdapterHistorico extends RecyclerView.Adapter<AdapterHistorico.HistoricoViewHolder> {
-    private final ArrayList<ItemHistorico> mHistoricoList;
+    private final ArrayList<Purchase> mPurchases;
     private AdapterCarrinho.OnItemClickListener mListener;
 
 
@@ -28,9 +28,9 @@ class AdapterHistorico extends RecyclerView.Adapter<AdapterHistorico.HistoricoVi
         }
     }
 
-    public AdapterHistorico(ArrayList<ItemHistorico> historicoList)
+    public AdapterHistorico(ArrayList<Purchase> purchases)
     {
-        mHistoricoList=historicoList;
+        mPurchases=purchases;
     }
 
 
@@ -45,11 +45,10 @@ class AdapterHistorico extends RecyclerView.Adapter<AdapterHistorico.HistoricoVi
     @Override
     public void onBindViewHolder(@NonNull HistoricoViewHolder holder, int position) {
 
-        ItemHistorico currentItem=mHistoricoList.get(position);
+        Purchase currentItem=mPurchases.get(position);
 
-        holder.mHImagem.setImageResource(currentItem.getmImagem());
-        holder.mHTitulo.setText(currentItem.getmTitulo());
-        holder.mHPreco.setText(currentItem.getmPreco());
+        holder.mHTitulo.setText(String.valueOf(currentItem.getDate()));
+        holder.mHPreco.setText(String.valueOf(currentItem.getTotal_price()));
 
 
     }
@@ -57,6 +56,6 @@ class AdapterHistorico extends RecyclerView.Adapter<AdapterHistorico.HistoricoVi
 
     @Override
     public int getItemCount() {
-        return mHistoricoList.size();
+        return mPurchases.size();
     }
 }

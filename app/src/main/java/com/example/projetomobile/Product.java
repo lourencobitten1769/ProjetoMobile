@@ -1,6 +1,8 @@
 package com.example.projetomobile;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
     private int product_id,price,size,stock,category_id;
     private String product_name,description,image;
 

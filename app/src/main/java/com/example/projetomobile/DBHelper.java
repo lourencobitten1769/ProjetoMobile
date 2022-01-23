@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.ParseException;
 import java.util.LinkedList;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -108,7 +109,6 @@ public class DBHelper extends SQLiteOpenHelper {
         String tablePurchases="CREATE TABLE purchases(" +
                 "purchase_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "total_price REAL NOT NULL," +
-                "quantity INTEGER NOT NULL," +
                 "date DATE NOT NULL," +
                 "user_id INTEGER NOT NULL,"+
                 "FOREIGN KEY(user_id)" +
@@ -117,11 +117,22 @@ public class DBHelper extends SQLiteOpenHelper {
         String tableProductsPurchases="CREATE TABLE productspurchases(" +
                 "productpurchase_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "product_id INTEGER NOT NULL," +
+                "quantity INTEGER NOT NULL,"+
                 "purchase_id INTEGER NOT NULL," +
                 "FOREIGN KEY(product_id)" +
                 "REFERENCES products(product_id)," +
                 "FOREIGN KEY(purchase_id)" +
                 "REFERENCES purchases(purchase_id));";
+
+        String tableCartItems="CREATE TABLE cart_items(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "product_id INTEGER NOT NULL," +
+                "quantity INTEGER NOT NULL," +
+                "created_by INTEGER NOT NULL,"+
+                "FOREIGN KEY(product_id)"+
+                "REFERENCES products(product_id),"+
+                "FOREIGN KEY(created_by)"+
+                "REFERENCES users(id))";
 
         db.execSQL(tableAuthAssignment);
         db.execSQL(tableAuthRule);
@@ -135,6 +146,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(tableProviders);
         db.execSQL(tablePurchases);
         db.execSQL(tableProductsPurchases);
+        db.execSQL(tableCartItems);
 
 
     }
@@ -213,18 +225,38 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void removerAllUsers(){
-        this.database.rawQuery("DELETE FROM users",
-                null);
+        this.database.delete("users",null,null);
     }
 
-    public Boolean login(String email, String password){
+    public User userlogado(String username){
 
-        Cursor cursor = database.rawQuery("Select * FROM users Where email = ? and password_hash = ?", new String[] {email,password});
+        Cursor cursor = database.rawQuery("Select * FROM users Where username = ? ",new String[] {username});
+
+
         if (cursor.getCount()>0){
-            return true;
+            User user= new User();
+            if(cursor.moveToFirst()) {
+                do {
+                    user.setId(cursor.getInt(0));
+                    user.setUsername(cursor.getString(1));
+                    user.setAuth_key(cursor.getString(2));
+                    user.setPassword_hash(cursor.getString(3));
+                    user.setPassword_reset_token(cursor.getString(4));
+                    user.setEmail(cursor.getString(5));
+                    user.setMorada(cursor.getString(6));
+                    user.setNif(cursor.getInt(7));
+                    user.setPontos(cursor.getInt(8));
+                    user.setSocio(false);
+                    user.setStatus(cursor.getInt(10));
+                    user.setCreated_at(cursor.getInt(11));
+                    user.setUpdated_At(cursor.getInt(12));
+                    user.setVerification_token(cursor.getString(13));
+                } while (cursor.moveToNext());
+            }
+            return user;
         }
         else {
-            return false;
+            return null;
         }
 
     }
@@ -268,6 +300,173 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return products;
     }
+
+    public Product getProductById(int productId){
+        Cursor cursor=this.database.rawQuery("SELECT * FROM products WHERE product_id=" + productId,
+                null);
+        Product product=new Product();
+        if(cursor.moveToFirst()){
+            do{
+                product.setProduct_id(cursor.getInt(0));
+                product.setProduct_name(cursor.getString(1));
+                product.setDescription(cursor.getString(2));
+                product.setPrice(cursor.getInt(3));
+                product.setSize(cursor.getInt(4));
+                product.setStock(cursor.getInt(5));
+                product.setImage(cursor.getString(6));
+                product.setCategory_id(cursor.getInt(7));
+            }while(cursor.moveToNext());
+        }
+        return product;
+
+    }
+
+    public LinkedList<Product> getProductsByCategory(int categoryId){
+        LinkedList<Product> products = new LinkedList<>();
+        Cursor cursor = this.database.rawQuery("SELECT * FROM products WHERE category_id=" + categoryId,
+                null);
+        if(cursor.moveToFirst()){
+            do{
+                Product product=new Product();
+                product.setProduct_id(cursor.getInt(0));
+                product.setProduct_name(cursor.getString(1));
+                product.setDescription(cursor.getString(2));
+                product.setPrice(cursor.getInt(3));
+                product.setSize(cursor.getInt(4));
+                product.setStock(cursor.getInt(5));
+                product.setImage(cursor.getString(6));
+                product.setCategory_id(cursor.getInt(7));
+                products.add(product);
+            }while(cursor.moveToNext());
+        }
+        return products;
+    }
+
+    public boolean guardarProduct(Product product){
+        ContentValues values = new ContentValues();
+        values.put("product_id", product.getProduct_id());
+        values.put("product_name",product.getProduct_name());
+        values.put("description", product.getDescription());
+        values.put("price", product.getPrice());
+        values.put("size",product.getSize());
+        values.put("stock", product.getStock());
+        values.put("image", product.getImage());
+        values.put("category_id", product.getCategory_id());
+        return this.database.update("products", values,
+                "product_id = ?", new String[]{"" + product.getProduct_id()}) > 0;
+    }
+
+    public void removerProduct(long idProduct){
+        this.database.delete("products", "product_id = ?",
+                new String[]{"" + idProduct});
+    }
+
+    public void removerAllProducts(){
+        this.database.delete("products",null,null);
+    }
+
+    //-------------------------------//END OF PRODUCT METHOD//--------------------------------------
+
+    //-------------------------------//CATEGORY METHOD//--------------------------------------------
+
+    public void adicionarCategory(Category category){
+
+        ContentValues values = new ContentValues();
+        values.put("category_id", category.getCategory_id());
+        values.put("category",category.getCategory());
+
+        this.database.insert("category", null, values);
+    }
+
+    public LinkedList<Category> getAllCategories(){
+        LinkedList<Category> categories = new LinkedList<>();
+        Cursor cursor = this.database.rawQuery("SELECT * FROM category",
+                null);
+        if(cursor.moveToFirst()){
+            do{
+                Category category=new Category();
+                category.setCategory_id(cursor.getInt(0));
+                category.setCategory(cursor.getString(1));
+                categories.add(category);
+            }while(cursor.moveToNext());
+        }
+        return categories;
+    }
+
+    public void removerAllCategories(){
+        this.database.delete("category",null,null);
+    }
+
+    //-------------------------------//END OF CATEGORY METHOD//-------------------------------------
+
+    //-------------------------------//PURCHASE METHOD//-------------------------------------
+
+    public LinkedList<Purchase> getPurchasesByUser(int userID) throws ParseException {
+        LinkedList<Purchase> purchases = new LinkedList<>();
+        Cursor cursor = this.database.rawQuery("SELECT * FROM purchases where user_id=" + userID,
+                null);
+        if(cursor.moveToFirst()){
+            do{
+                Purchase purchase=new Purchase();
+                purchase.setPurchase_id(cursor.getInt(0));
+                purchase.setTotal_price(cursor.getDouble(1));
+                purchase.setDate(cursor.getString(2));
+                purchase.setUser_id(cursor.getInt(3));
+                purchases.add(purchase);
+            }while(cursor.moveToNext());
+        }
+        return purchases;
+    }
+
+    public void adicionarPurchase(Purchase purchase){
+
+        ContentValues values = new ContentValues();
+        values.put("purchase_id", purchase.getPurchase_id());
+        values.put("total_price",purchase.getTotal_price());
+        values.put("date", String.valueOf(purchase.getDate()));
+        values.put("user_id",purchase.getUser_id());
+
+        this.database.insert("purchases", null, values);
+    }
+
+    public void removerAllPurchases(){
+        this.database.delete("purchases",null,null);
+    }
+    //-------------------------------//END OF PURCHASE METHOD//-------------------------------------
+    //-------------------------------//CARTITEMS METHOD//-------------------------------------
+
+    public void adicionarCartItem(CartItem cartItem){
+
+        ContentValues values = new ContentValues();
+        values.put("id", cartItem.getId());
+        values.put("product_id",cartItem.getProduct_id());
+        values.put("quantity", cartItem.getQuantity());
+        values.put("created_by",cartItem.getCreated_by());
+
+        this.database.insert("cart_items", null, values);
+    }
+
+    public LinkedList<CartItem> getCartByUser(int userID) throws ParseException {
+        LinkedList<CartItem> cartitems = new LinkedList<>();
+        Cursor cursor = this.database.rawQuery("SELECT * FROM cart_items where created_by=" + userID,
+                null);
+        if(cursor.moveToFirst()){
+            do{
+                CartItem cartItem=new CartItem();
+                cartItem.setId(cursor.getInt(0));
+                cartItem.setProduct_id(cursor.getInt(1));
+                cartItem.setQuantity(cursor.getInt(2));
+                cartItem.setCreated_by(cursor.getInt(3));
+                cartitems.add(cartItem);
+            }while(cursor.moveToNext());
+        }
+        return cartitems;
+    }
+
+    public void removerAllCart(){
+        this.database.delete("cart_items",null,null);
+    }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

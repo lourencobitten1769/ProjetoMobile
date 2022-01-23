@@ -1,9 +1,9 @@
 package com.example.projetomobile;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.CarrinhoViewHolder> {
-    private final ArrayList<ItemCarrinho> mCarrinhoList;
+    private final ArrayList<CartItem> mCarrinhoList;
     private OnItemClickListener mListener;
-
+    DBHelper dbHelper;
 
 
 
@@ -28,17 +28,17 @@ class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.CarrinhoViewH
     }
 
     public static class CarrinhoViewHolder extends RecyclerView.ViewHolder {
-        public ImageView mImagem;
-        public TextView mTitulo;
+        public TextView mProduto;
         public TextView mPreco;
-        public ImageView mDeleteImagem;
+        public TextView mQuantidade;
+
 
         public CarrinhoViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
-            mImagem=itemView.findViewById(R.id.imageHProduto);
-            mTitulo=itemView.findViewById(R.id.txtHData);
+            mProduto=itemView.findViewById(R.id.txtHData);
             mPreco=itemView.findViewById(R.id.txtHPreco);
-            mDeleteImagem=itemView.findViewById(R.id.imageDelete);
+            mQuantidade=itemView.findViewById(R.id.txtHQuantidade);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -53,25 +53,13 @@ class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.CarrinhoViewH
 
                 }
             });
-
-            mDeleteImagem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(listener != null){
-                        int position= getAdapterPosition();
-                        if(position !=RecyclerView.NO_POSITION){
-                            listener.onDeleteClick(position);
-                        }
-                    }
-                }
-            });
-
         }
     }
 
-    public AdapterCarrinho(ArrayList<ItemCarrinho> carrinhoList){
+    public AdapterCarrinho(ArrayList<CartItem> carrinhoList, Context context){
 
         mCarrinhoList= carrinhoList;
+        dbHelper=new DBHelper(context);
 
     }
 
@@ -88,11 +76,10 @@ class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.CarrinhoViewH
     @Override
     public void onBindViewHolder(@NonNull CarrinhoViewHolder holder, int position) {
 
-        ItemCarrinho currentItem= mCarrinhoList.get(position);
-
-        holder.mImagem.setImageResource(currentItem.getmImagem());
-        holder.mTitulo.setText(currentItem.getmTitulo());
-        holder.mPreco.setText(currentItem.getmPreco());
+        Product product=dbHelper.getProductById(mCarrinhoList.get(position).getProduct_id());
+        holder.mProduto.setText(product.getProduct_name());
+        holder.mPreco.setText(holder.mPreco.getText()+String.valueOf(product.getPrice()));
+        holder.mQuantidade.setText(holder.mQuantidade.getText()+String.valueOf(mCarrinhoList.get(position).getQuantity()));
 
     }
 

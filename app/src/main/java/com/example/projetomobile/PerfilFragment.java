@@ -1,19 +1,37 @@
 package com.example.projetomobile;
 
-import android.content.ClipData;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +43,10 @@ public class PerfilFragment extends Fragment {
     private RecyclerView mRecyclerHistorico;
     private AdapterHistorico adapterHistorico;
     private RecyclerView.LayoutManager layoutManager;
-    public ArrayList<ItemHistorico> itemHistoricos=new ArrayList<>();
+    public ArrayList<Purchase> purchases=new ArrayList<>();
+    EditText txtInputUser, txtInputEmail, txtInputMorada;
+    Button btnEditarPerfil;
+    DBHelper dbHelper;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,19 +94,108 @@ public class PerfilFragment extends Fragment {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_perfil,container,false);
 
-        itemHistoricos.add(new ItemHistorico(R.drawable.house,"11/12/2021","60€"));
-        itemHistoricos.add(new ItemHistorico(R.drawable.house,"02/06/2005","40€"));
-        itemHistoricos.add(new ItemHistorico(R.drawable.house,"11/07/2018","22€"));
+        User userLogado = (User) this.getArguments().getSerializable("user");
 
-        mRecyclerHistorico=v.findViewById(R.id.rvHistorico);
-        mRecyclerHistorico.setHasFixedSize(true);
-        layoutManager=new LinearLayoutManager(getContext());
-        adapterHistorico= new AdapterHistorico(itemHistoricos);
-        mRecyclerHistorico.scheduleLayoutAnimation();
-        mRecyclerHistorico.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
+        txtInputUser=v.findViewById(R.id.edtUser);
+        txtInputEmail=v.findViewById(R.id.edtEmail);
+        txtInputMorada=v.findViewById(R.id.edtMorada);
+        btnEditarPerfil=v.findViewById(R.id.btnEditarPerfil);
 
-        mRecyclerHistorico.setLayoutManager(layoutManager);
-        mRecyclerHistorico.setAdapter(adapterHistorico);
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        Integer userid=sharedPref.getInt(getString(R.string.userid),0);
+        String username=sharedPref.getString(String.valueOf(R.string.username),"");
+
+        Log.d("teste",userid.toString());
+        Log.d("teste",username);
+
+        txtInputUser.setText(userLogado.getUsername());
+        txtInputUser.requestFocus();
+        txtInputEmail.setText(userLogado.getEmail());
+        txtInputEmail.requestFocus();
+        txtInputMorada.setText(userLogado.getMorada());
+        txtInputMorada.requestFocus();
+
+        RequestQueue requestQueue= Volley.newRequestQueue(getActivity());
+        String url= "http://10.0.2.2/projetoweb/backend/web/index.php/api/purchase";
+        dbHelper=new DBHelper(getActivity());
+
+        if(LoginActivity.isInternetConnection(getActivity())){
+            dbHelper.removerAllPurchases();
+        }
+
+        JsonArrayRequest jsonArrayRequest=new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i=0;i<response.length();i++){
+                        JSONObject jsonObject=response.getJSONObject(i);
+                        Purchase purchase=new Purchase();
+                        purchase.setPurchase_id(jsonObject.getInt("purchase_id"));
+                        purchase.setTotal_price(jsonObject.getDouble("total_price"));
+                        purchase.setDate(jsonObject.getString("date"));
+                        purchase.setUser_id(jsonObject.getInt("user_id"));
+
+                        dbHelper.adicionarPurchase(purchase);
+                    }
+                    try {
+                        purchases.addAll(dbHelper.getPurchasesByUser(userLogado.getId()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    mRecyclerHistorico=v.findViewById(R.id.rvHistorico);
+                    mRecyclerHistorico.setHasFixedSize(true);
+                    layoutManager=new LinearLayoutManager(getContext());
+                    adapterHistorico= new AdapterHistorico(purchases);
+                    mRecyclerHistorico.scheduleLayoutAnimation();
+                    mRecyclerHistorico.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
+
+                    mRecyclerHistorico.setLayoutManager(layoutManager);
+                    mRecyclerHistorico.setAdapter(adapterHistorico);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requestQueue.add(jsonArrayRequest);
+
+        btnEditarPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String urlPut= "http://10.0.2.2/projetoweb/backend/web/index.php/api/user/" + userLogado.getId();
+                RequestQueue requestQueuePost=Volley.newRequestQueue(getActivity());
+                StringRequest stringRequest= new StringRequest(Request.Method.PUT, urlPut, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Response","Positive Response");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Response","Negative Response");
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String,String> params= new HashMap<String,String>();
+                        params.put("username", String.valueOf(txtInputUser.getText()));
+                        params.put("email",String.valueOf(txtInputEmail.getText()));
+                        params.put("morada",String.valueOf(txtInputMorada.getText()));
+                        return params;
+                    }
+                };
+                requestQueuePost.add(stringRequest);
+            }
+        });
+
+
 
 
         return v;

@@ -1,6 +1,8 @@
 package com.example.projetomobile;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +20,10 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -27,7 +31,7 @@ import java.util.List;
  * Use the {@link InicialFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class InicialFragment extends Fragment {
+public class InicialFragment extends Fragment implements AdapterTypeHoriz.OnItemClickListener,AdapterProdutos.OnItemClickListener{
 
 
     private AdapterTypeHoriz adapterTypeHoriz;
@@ -45,10 +49,11 @@ public class InicialFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private RecyclerView horizontal_recycler;
-    public ArrayList<ItemHorizontal> itemHorizontals;
+    public LinkedList<Category> itemHorizontals;
 
-    private RecyclerView rv_produtos;
+    public RecyclerView rv_produtos;
 
+    DBHelper dbHelper;
 
 
 
@@ -83,7 +88,6 @@ public class InicialFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
     }
 
     @Override
@@ -91,21 +95,24 @@ public class InicialFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_inicial, container, false);
+
         horizontal_recycler=view.findViewById(R.id.horizontal_recycler);
-        horizontal_recycler.setLayoutManager(new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
 
-        DBHelper dbHelper= new DBHelper(getActivity());
-        RequestQueue requestQueue= Volley.newRequestQueue(getActivity());
-        String url ="http://10.0.2.2/projetoweb/backend/web/index.php/api/product";
 
+
+        dbHelper= new DBHelper(getActivity());
         //RecyclerViewProdutos
         rv_produtos=view.findViewById(R.id.rv_produtos);
         products= new ArrayList<>();
+        itemHorizontals=new LinkedList<>();
 
 
+        RequestQueue requestQueue= Volley.newRequestQueue(getActivity());
+        String url ="http://10.0.2.2/projetoweb/backend/web/index.php/api/product";
 
-        /*JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
@@ -129,6 +136,7 @@ public class InicialFragment extends Fragment {
                         product.setImage(jsonObject.getString("image"));
 
                         dbHelper.adicionarProduct(product);
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -142,49 +150,83 @@ public class InicialFragment extends Fragment {
         });
 
         requestQueue.add(jsonArrayRequest);
-*/
 
-        products.addAll(dbHelper.getAllProducts());
 
-        url="http://localhost/projetoweb/backend/web/index.php/api/category";
 
-        JsonArrayRequest jsonArrayRequest=new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
+
+        String urlCategory="http://10.0.2.2/projetoweb/backend/web/index.php/api/category";
+
+        JsonArrayRequest jsonArrayRequestCategory=new JsonArrayRequest(Request.Method.GET, urlCategory, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                
+                    try {
+                        Log.d("entrou","entrou");
+                        for (int i=0;i<response.length();i++){
+                        JSONObject jsonObject=response.getJSONObject(i);
+                        Category category=new Category();
+                        category.setCategory_id(jsonObject.getInt("category_id"));
+                        category.setCategory(jsonObject.getString("category"));
+
+                        dbHelper.adicionarCategory(category);
+
+                        }
+
+
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                    Log.d("erro", String.valueOf(error));
             }
         });
+        RequestQueue requestQueueCategory=new Volley().newRequestQueue(getActivity());
+        requestQueueCategory.add(jsonArrayRequestCategory);
 
 
-
-        adapterProdutos= new AdapterProdutos(getContext(),products);
+        products.addAll(dbHelper.getAllProducts());
+        horizontal_recycler.setLayoutManager(new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        adapterProdutos= new AdapterProdutos(getContext(),products,this);
 
         GridLayoutManager gridLayoutManager= new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false);
         rv_produtos.setLayoutManager(gridLayoutManager);
         rv_produtos.setAdapter(adapterProdutos);
 
 
-        String[] itemType = {"Carros", "Roupas", "Animais", "Bebé", "Informática"};
+        itemHorizontals.addAll(dbHelper.getAllCategories());
+        adapterTypeHoriz=new AdapterTypeHoriz(itemHorizontals,getActivity(),this);
 
-        itemHorizontals=new ArrayList<>();
+        horizontal_recycler.setAdapter(adapterTypeHoriz);
 
-
-        for (int i=0;i<itemType.length; i++){
-            ItemHorizontal itemHorizontal = new ItemHorizontal(itemType[i]);
-            itemHorizontals.add(itemHorizontal);
-        }
-
-        horizontal_recycler.setAdapter(new AdapterTypeHoriz(itemHorizontals));
 
         return view;
     }
 
 
+    @Override
+    public void onItemCLick(int position) {
+        LinkedList<Product> products=dbHelper.getProductsByCategory(itemHorizontals.get(position).getCategory_id());
+        AdapterProdutos adapterProdutos=new AdapterProdutos(getContext(),products,this);
+        rv_produtos.setAdapter(adapterProdutos);
+        GridLayoutManager gridLayoutManager= new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false);
+        rv_produtos.setLayoutManager(gridLayoutManager);
+
+    }
+
+    @Override
+    public void OnItemClick(int position) {
+        User userLogado=(User) this.getArguments().getSerializable("user");
+        Product productSelecionado= products.get(position);
+        Bundle bundleProduct= new Bundle();
+        bundleProduct.putSerializable("product",productSelecionado);
+        bundleProduct.putSerializable("user",userLogado);
+        Intent intent=new Intent(getContext(),DetailActivity.class);
+        intent.putExtras(bundleProduct);
+        startActivity(intent);
+    }
 }
 
 

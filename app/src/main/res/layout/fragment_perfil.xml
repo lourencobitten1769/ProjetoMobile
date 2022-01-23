@@ -61,7 +61,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.078"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:editable="true"/>
 
             <TextView
                 android:id="@+id/txtMorada"
@@ -89,68 +90,41 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txtInputNome"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="249dp"
-                android:layout_height="52dp"
-                android:layout_marginStart="-60dp"
-                android:layout_marginTop="170dp"
-                app:layout_constraintEnd_toEndOf="parent"
+            <EditText
+                android:id="@+id/edtUser"
+                android:layout_width="315dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_style"
+                android:ems="10"
+                android:inputType="textPersonName"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/txtNomeUser" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txtInputNomeUser"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:editable="false"
-                    android:hint="User"
-                    android:textColor="@color/black"
-                    tools:ignore="TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txtInputEmail"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="249dp"
-                android:layout_height="52dp"
-                android:layout_marginStart="23dp"
-                android:layout_marginTop="260dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+            <EditText
+                android:id="@+id/edtEmail"
+                android:layout_width="315dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="96dp"
+                android:background="@drawable/et_style"
+                android:ems="10"
+                android:inputType="textPersonName"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/txtNomeUser" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:hint="Email"
-                    tools:ignore="TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txtInputMorada"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="249dp"
-                android:layout_height="52dp"
-                android:layout_marginStart="23dp"
-                android:layout_marginTop="350dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+            <EditText
+                android:id="@+id/edtMorada"
+                android:layout_width="315dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="192dp"
+                android:background="@drawable/et_style"
+                android:ems="10"
+                android:inputType="textPersonName"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:hint="Morada"
-                    tools:ignore="TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintTop_toBottomOf="@+id/txtNomeUser" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RadioGroup>

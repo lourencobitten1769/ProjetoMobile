@@ -1,14 +1,12 @@
 package com.example.projetomobile;
 
-import java.util.Date;
-
 class Purchase {
 
     private int purchase_id, user_id;
     private double total_price;
-    private Date date;
+    private String date;
 
-    public Purchase(int purchase_id, double total_price, Date date, int user_id){
+    public Purchase(int purchase_id, double total_price, String date, int user_id){
         this.purchase_id=purchase_id;
         this.total_price=total_price;
         this.date=date;
@@ -43,11 +41,11 @@ class Purchase {
         this.total_price = total_price;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }

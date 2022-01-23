@@ -1,29 +1,27 @@
 package com.example.projetomobile;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.projetomobile.databinding.ActivityLoginBinding;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -51,7 +49,11 @@ public class LoginActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url ="http://10.0.2.2/projetoweb/backend/web/index.php/api/user";
 
-        /*JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+        if(isInternetConnection(this)){
+            dbHelper.removerAllUsers();
+        }
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
                     @Override
@@ -76,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
                                 user.setUpdated_At(jsonObject.getInt("updated_at"));
                                 user.setVerification_token(jsonObject.getString("verification_token"));
                                 //binding.edtEmail.setText(binding.edtEmail.getText()+user.getUsername());
-
                                 //singletonUser.adicionarUser(user);
                                 dbHelper.adicionarUser(user);
 
@@ -86,8 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
-
                     }
                 }, new Response.ErrorListener() {
 
@@ -100,7 +99,13 @@ public class LoginActivity extends AppCompatActivity {
 
         queue.add(jsonArrayRequest);
 
-*/
+        binding.txtRegistar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
+                    startActivity(intent);
+            }
+        });
 
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,6 +226,12 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
     }
 }*/
+
+    public static boolean isInternetConnection(Context context){
+        ConnectivityManager cm=(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo= cm.getActiveNetworkInfo();
+        return netInfo!= null && netInfo.isConnected();
+    }
 }
     
 

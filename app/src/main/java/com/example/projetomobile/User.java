@@ -1,6 +1,8 @@
 package com.example.projetomobile;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private int id,nif,pontos,status,created_at,updated_At;
     private String username,auth_key,password_hash,password_reset_token,email,morada, verification_token;
     private boolean socio;
