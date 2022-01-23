@@ -9,19 +9,22 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="95dp"
+        android:layout_width="173dp"
         android:layout_height="47dp"
         android:layout_margin="4dp"
+
         android:background="@drawable/rounded_radio_group_style"
         android:backgroundTint="@android:color/darker_gray">
 
         <TextView
             android:id="@+id/txtType"
-            android:layout_width="86dp"
-            android:layout_height="31dp"
+            android:layout_width="141dp"
+            android:layout_height="34dp"
             android:layout_margin="5dp"
             android:backgroundTint="@android:color/darker_gray"
             android:gravity="center"
+            android:maxLength="14"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.444"
