@@ -1,5 +1,7 @@
 package com.example.projetomobile;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -105,7 +107,11 @@ public class CarrinhoFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_carrinho, container, false);
 
-        User userLogado = (User) this.getArguments().getSerializable("user");
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        Integer userid=sharedPref.getInt(getString(R.string.userid),0);
+        String username=sharedPref.getString(String.valueOf(R.string.username),"");
+        String email=sharedPref.getString(String.valueOf(R.string.useremail),"");
+        String morada=sharedPref.getString(String.valueOf(R.string.usermorada),"");
 
         String url = "http://10.0.2.2/projetoweb/backend/web/index.php/api/cart";
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
@@ -134,7 +140,7 @@ public class CarrinhoFragment extends Fragment {
 
                     }
                     try {
-                        itemCarrinhos.addAll(dbHelper.getCartByUser(userLogado.getId()));
+                        itemCarrinhos.addAll(dbHelper.getCartByUser(userid));
                         mRecyclerCarrinho=v.findViewById(R.id.rvCarrinho);
                         mRecyclerCarrinho.setHasFixedSize(true);
                         layoutManager= new LinearLayoutManager(getContext());
@@ -196,7 +202,7 @@ public class CarrinhoFragment extends Fragment {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         System.out.println(formatter.format(date));
                         map.put("date",formatter.format(date));
-                        map.put("user_id", String.valueOf(userLogado.getId()));
+                        map.put("user_id", String.valueOf(userid));
                         return map;
                     }
                 };
