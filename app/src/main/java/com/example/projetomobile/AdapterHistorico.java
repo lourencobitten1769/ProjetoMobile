@@ -1,5 +1,6 @@
 package com.example.projetomobile;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +14,44 @@ import java.util.ArrayList;
 
 class AdapterHistorico extends RecyclerView.Adapter<AdapterHistorico.HistoricoViewHolder> {
     private final ArrayList<Purchase> mPurchases;
-    private AdapterCarrinho.OnItemClickListener mListener;
+    private AdapterHistorico.OnItemClickListener mListener;
+    private Context context;
 
 
     public static class HistoricoViewHolder extends RecyclerView.ViewHolder{
         public ImageView mHImagem;
         public TextView mHTitulo;
         public TextView mHPreco;
-        public HistoricoViewHolder(@NonNull View itemView, AdapterCarrinho.OnItemClickListener mListener) {
+        public HistoricoViewHolder(@NonNull View itemView, AdapterHistorico.OnItemClickListener mListener) {
             super(itemView);
             mHImagem=itemView.findViewById(R.id.imageHProduto);
             mHTitulo=itemView.findViewById(R.id.txtHData);
             mHPreco=itemView.findViewById(R.id.txtHPreco);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if( mListener!= null){
+                        int position= getAdapterPosition();
+                        if(position!=RecyclerView.NO_POSITION){
+                            mListener.OnItemClick(position);
+                        }
+                    }
+
+                }
+            });
         }
+    }
+
+    public AdapterHistorico(Context context, ArrayList<Purchase> mPurchases, AdapterHistorico.OnItemClickListener listener){
+        this.context=context;
+        this.mPurchases = mPurchases;
+        this.mListener=listener;
+    }
+
+    public interface OnItemClickListener{
+        void OnItemClick(int position);
     }
 
     public AdapterHistorico(ArrayList<Purchase> purchases)

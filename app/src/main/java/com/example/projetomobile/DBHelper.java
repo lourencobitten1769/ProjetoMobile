@@ -467,6 +467,36 @@ public class DBHelper extends SQLiteOpenHelper {
         this.database.delete("cart_items",null,null);
     }
 
+    public void adicionarProductPurchase(ProductPurchase productPurchase){
+
+            ContentValues values = new ContentValues();
+            values.put("productpurchase_id", productPurchase.getProductPurchase_id());
+            values.put("product_id",productPurchase.getProduct_id());
+            values.put("purchase_id", productPurchase.getPurchase_id());
+            values.put("quantity", productPurchase.getQuantity());
+
+            this.database.insert("productspurchases", null, values);
+    }
+
+    public LinkedList<ProductPurchase> getallProductPurchases(){
+        LinkedList<ProductPurchase> productPurchases = new LinkedList<>();
+        Cursor cursor = this.database.rawQuery("SELECT * FROM productspurchases",
+                null);
+        if(cursor.moveToFirst()){
+            do{
+                ProductPurchase productPurchase=new ProductPurchase();
+                productPurchase.setProductPurchase_id(cursor.getInt(0));
+                productPurchase.setProduct_id(cursor.getInt(1));
+                productPurchase.setPurchase_id(cursor.getInt(2));
+                productPurchase.setQuantity(cursor.getInt(3));
+                productPurchases.add(productPurchase);
+            }while(cursor.moveToNext());
+        }
+        return productPurchases;
+    }
+
+
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

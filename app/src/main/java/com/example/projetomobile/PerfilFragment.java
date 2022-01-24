@@ -1,6 +1,7 @@
 package com.example.projetomobile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,7 +39,7 @@ import java.util.Map;
  * Use the {@link PerfilFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PerfilFragment extends Fragment {
+public class PerfilFragment extends Fragment implements AdapterHistorico.OnItemClickListener {
 
     private RecyclerView mRecyclerHistorico;
     private AdapterHistorico adapterHistorico;
@@ -203,5 +204,18 @@ public class PerfilFragment extends Fragment {
 
 
         return v;
+    }
+
+    @Override
+    public void OnItemClick(int position) {
+
+        Intent intent=new Intent(getContext(),HistoricoDetail.class);
+        Bundle bundle=new Bundle();
+        bundle.putInt("id",purchases.get(position).getPurchase_id());
+        intent.putExtras(bundle);
+        startActivity(intent);
+
+
+
     }
 }
