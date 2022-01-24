@@ -495,6 +495,23 @@ public class DBHelper extends SQLiteOpenHelper {
         return productPurchases;
     }
 
+    public LinkedList<ProductPurchase> getProductPurchasesByPurchase(int purchaseID) throws ParseException {
+        LinkedList<ProductPurchase> productPurchases = new LinkedList<>();
+        Cursor cursor = this.database.rawQuery("SELECT * FROM productspurchases where purchase_id=" + purchaseID,
+                null);
+        if(cursor.moveToFirst()){
+            do{
+                ProductPurchase productPurchase=new ProductPurchase();
+                productPurchase.setProductPurchase_id(cursor.getInt(0));
+                productPurchase.setProduct_id(cursor.getInt(1));
+                productPurchase.setPurchase_id(cursor.getInt(2));
+                productPurchase.setQuantity(cursor.getInt(3));
+                productPurchases.add(productPurchase);
+            }while(cursor.moveToNext());
+        }
+        return productPurchases;
+    }
+
 
 
 

@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 class AdapterHistoricoDetail extends RecyclerView.Adapter<AdapterHistoricoDetail.HistoricoDetailViewHolder>
 {
@@ -30,7 +29,7 @@ class AdapterHistoricoDetail extends RecyclerView.Adapter<AdapterHistoricoDetail
         public HistoricoDetailViewHolder(View itemView,OnItemClickListener listener)
         {
             super(itemView);
-            imgProduto=itemView.findViewById(R.id.imgProduto);
+            //imgProduto=itemView.findViewById(R.id.imgProduto);
             txtNomeProduto=itemView.findViewById(R.id.txtNomeProduto);
             txtPreco=itemView.findViewById(R.id.txtPreco);
             txtQuantidade=itemView.findViewById(R.id.txtQuantidade);
@@ -81,8 +80,8 @@ class AdapterHistoricoDetail extends RecyclerView.Adapter<AdapterHistoricoDetail
 
         Product product= dbHelper.getProductById(mPurchasesDetail.get(position).getProduct_id());
         holder.txtNomeProduto.setText(product.getProduct_name());
-        holder.txtPreco.setText(product.getPrice());
-        holder.txtQuantidade.setText(mPurchasesDetail.get(position).getQuantity());
+        holder.txtPreco.setText("Preço:" + String.valueOf(product.getPrice()));
+        holder.txtQuantidade.setText("Quantity:" + String.valueOf(mPurchasesDetail.get(position).getQuantity()));
     }
 
 

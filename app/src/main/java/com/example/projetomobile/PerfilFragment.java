@@ -106,6 +106,7 @@ public class PerfilFragment extends Fragment implements AdapterHistorico.OnItemC
         String email=sharedPref.getString(String.valueOf(R.string.useremail),"");
         String morada=sharedPref.getString(String.valueOf(R.string.usermorada),"");
 
+        AdapterHistorico.OnItemClickListener mListener=this;
 
         Log.d("teste",userid.toString());
         Log.d("teste",username);
@@ -142,22 +143,23 @@ public class PerfilFragment extends Fragment implements AdapterHistorico.OnItemC
 
                         dbHelper.adicionarPurchase(purchase);
                     }
+
                     try {
                         purchases.addAll(dbHelper.getPurchasesByUser(userid));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
-
                     mRecyclerHistorico=v.findViewById(R.id.rvHistorico);
                     mRecyclerHistorico.setHasFixedSize(true);
                     layoutManager=new LinearLayoutManager(getContext());
-                    adapterHistorico= new AdapterHistorico(purchases);
+                    adapterHistorico= new AdapterHistorico(getActivity(),purchases,mListener);
                     mRecyclerHistorico.scheduleLayoutAnimation();
                     mRecyclerHistorico.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
 
                     mRecyclerHistorico.setLayoutManager(layoutManager);
                     mRecyclerHistorico.setAdapter(adapterHistorico);
+
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -168,6 +170,8 @@ public class PerfilFragment extends Fragment implements AdapterHistorico.OnItemC
 
             }
         });
+
+
 
         requestQueue.add(jsonArrayRequest);
 

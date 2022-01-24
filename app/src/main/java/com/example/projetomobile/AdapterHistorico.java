@@ -31,13 +31,8 @@ class AdapterHistorico extends RecyclerView.Adapter<AdapterHistorico.HistoricoVi
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    if( mListener!= null){
                         int position= getAdapterPosition();
-                        if(position!=RecyclerView.NO_POSITION){
-                            mListener.OnItemClick(position);
-                        }
-                    }
+                        mListener.OnItemClick(position);
 
                 }
             });
@@ -53,12 +48,6 @@ class AdapterHistorico extends RecyclerView.Adapter<AdapterHistorico.HistoricoVi
     public interface OnItemClickListener{
         void OnItemClick(int position);
     }
-
-    public AdapterHistorico(ArrayList<Purchase> purchases)
-    {
-        mPurchases=purchases;
-    }
-
 
     @NonNull
     @Override
