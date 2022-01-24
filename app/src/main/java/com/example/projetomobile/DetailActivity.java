@@ -44,6 +44,12 @@ public class DetailActivity extends AppCompatActivity {
 
         List<Integer> list= new ArrayList<>();
 
+        /*SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        Integer userid=sharedPref.getInt(getString(R.string.userid),0);
+        String username=sharedPref.getString(String.valueOf(R.string.username),"");
+        String email=sharedPref.getString(String.valueOf(R.string.useremail),"");
+        String morada=sharedPref.getString(String.valueOf(R.string.usermorada),"");*/
+
         User userLogado= (User) getIntent().getSerializableExtra("user");
 
         for (int i=1;i<=product.getStock();i++){
