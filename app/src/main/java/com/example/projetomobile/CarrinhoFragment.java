@@ -169,11 +169,6 @@ public class CarrinhoFragment extends Fragment {
 
 
 
-
-
-
-
-
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,7 +251,7 @@ public class CarrinhoFragment extends Fragment {
             }
         });
 
-        /*adapterCarrinho.setOnItemClickListener(new AdapterCarrinho.OnItemClickListener() {
+        adapterCarrinho.setOnItemClickListener(new AdapterCarrinho.OnItemClickListener() {
             @Override
             public void onItemCLick(int position) {
 
@@ -268,7 +263,7 @@ public class CarrinhoFragment extends Fragment {
                 CarrinhoFragment.this.onDeleteClick(position);
             }
         });
-        */
+
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallBack= new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
             @Override
