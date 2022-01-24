@@ -53,6 +53,7 @@ class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ProdutosViewh
     @Override
     public void onBindViewHolder(@NonNull ProdutosViewholder holder, int position) {
         holder.title.setText(products.get(position).getProduct_name());
+        holder.preco.setText(String.valueOf(products.get(position).getPrice()) + "€");
         //holder.gridImage.setImageResource(products.get(position).getImage());
     }
 
@@ -63,13 +64,14 @@ class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ProdutosViewh
 
     public class ProdutosViewholder extends RecyclerView.ViewHolder{
         OnItemClickListener listener;
-        TextView title;
+        TextView title,preco;
         ImageView gridImage;
 
         public ProdutosViewholder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             this.listener=listener;
             title=itemView.findViewById(R.id.txtProduto);
+            preco=itemView.findViewById(R.id.txtPrecoProduto);
             gridImage=itemView.findViewById(R.id.ivProduto);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

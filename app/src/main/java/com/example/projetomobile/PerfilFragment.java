@@ -94,8 +94,6 @@ public class PerfilFragment extends Fragment {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_perfil,container,false);
 
-        User userLogado = (User) this.getArguments().getSerializable("user");
-
         txtInputUser=v.findViewById(R.id.edtUser);
         txtInputEmail=v.findViewById(R.id.edtEmail);
         txtInputMorada=v.findViewById(R.id.edtMorada);
@@ -104,15 +102,21 @@ public class PerfilFragment extends Fragment {
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         Integer userid=sharedPref.getInt(getString(R.string.userid),0);
         String username=sharedPref.getString(String.valueOf(R.string.username),"");
+        String email=sharedPref.getString(String.valueOf(R.string.useremail),"");
+        String morada=sharedPref.getString(String.valueOf(R.string.usermorada),"");
+
 
         Log.d("teste",userid.toString());
         Log.d("teste",username);
+        Log.d("teste",email);
+        Log.d("teste",morada);
 
-        txtInputUser.setText(userLogado.getUsername());
+
+        txtInputUser.setText(username);
         txtInputUser.requestFocus();
-        txtInputEmail.setText(userLogado.getEmail());
+        txtInputEmail.setText(email);
         txtInputEmail.requestFocus();
-        txtInputMorada.setText(userLogado.getMorada());
+        txtInputMorada.setText(morada);
         txtInputMorada.requestFocus();
 
         RequestQueue requestQueue= Volley.newRequestQueue(getActivity());
@@ -138,7 +142,7 @@ public class PerfilFragment extends Fragment {
                         dbHelper.adicionarPurchase(purchase);
                     }
                     try {
-                        purchases.addAll(dbHelper.getPurchasesByUser(userLogado.getId()));
+                        purchases.addAll(dbHelper.getPurchasesByUser(userid));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -169,7 +173,7 @@ public class PerfilFragment extends Fragment {
         btnEditarPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String urlPut= "http://10.0.2.2/projetoweb/backend/web/index.php/api/user/" + userLogado.getId();
+                String urlPut= "http://10.0.2.2/projetoweb/backend/web/index.php/api/user/" + userid;
                 RequestQueue requestQueuePost=Volley.newRequestQueue(getActivity());
                 StringRequest stringRequest= new StringRequest(Request.Method.PUT, urlPut, new Response.Listener<String>() {
                     @Override
