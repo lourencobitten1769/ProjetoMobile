@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_style"
     tools:context=".LoginActivity">
 
     <ImageView
@@ -26,6 +27,7 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,8 +36,8 @@
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="167dp"
-        android:layout_height="39dp"
+        android:layout_width="186dp"
+        android:layout_height="48dp"
         android:layout_marginTop="40dp"
         android:background="@drawable/et_style"
         android:text="Login"
@@ -59,15 +61,17 @@
 
     <EditText
         android:id="@+id/edtEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="224dp"
+        android:layout_height="46dp"
         android:layout_marginTop="36dp"
-        android:ems="10"
         android:background="@drawable/et_style"
+        android:ems="10"
+        android:hint="Nome"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivLogo" />
+        app:layout_constraintTop_toBottomOf="@+id/ivLogo"
+        tools:ignore="TouchTargetSizeCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

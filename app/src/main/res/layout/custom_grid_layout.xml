@@ -28,14 +28,16 @@
 
         <TextView
             android:id="@+id/txtProduto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_width="127dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="12dp"
+            android:maxLength="14"
+            android:maxLines="1"
             android:text="Nome Produto"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.521"
+            app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivProduto" />
 
@@ -43,7 +45,7 @@
             android:id="@+id/txtPrecoProduto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="112dp"
+            android:layout_marginTop="152dp"
             android:text="Preço"
             android:textColor="@color/black"
             android:textSize="14sp"
