@@ -4,20 +4,24 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ProdutosViewholder> {
+class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ProdutosViewholder> implements Filterable {
 
     List<Product> products;
     Context context;
     LayoutInflater inflater;
     public OnItemClickListener mListener;
+    ArrayList<Product> fullList;
 
 
 
@@ -26,6 +30,8 @@ class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ProdutosViewh
         this.products=products;
         this.inflater = LayoutInflater.from(context);
         mListener=listener;
+
+        fullList=new ArrayList<>(products);
     }
 
     public AdapterProdutos(Context context, List<Product> products) {
@@ -33,6 +39,39 @@ class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ProdutosViewh
         this.products=products;
         this.inflater = LayoutInflater.from(context);
     }
+
+    @Override
+    public Filter getFilter() {
+        return search_filter;
+    }
+
+    private Filter search_filter= new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<Product> filteredList = new ArrayList<>();
+            if(constraint==null|| constraint.length()==0){
+                filteredList.addAll(fullList);
+            }
+            else {
+                String filterPattern= constraint.toString().toLowerCase().trim();
+                for(Product product : fullList){
+                    if(product.getProduct_name().toUpperCase().contains(filterPattern)){
+                        filteredList.add(product);
+                    }
+                }
+            }
+            FilterResults results= new FilterResults();
+            results.values=filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            products.clear();
+            products.addAll((ArrayList) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public interface OnItemClickListener{
         void OnItemClick(int position);

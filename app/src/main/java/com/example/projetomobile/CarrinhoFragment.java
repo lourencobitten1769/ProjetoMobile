@@ -9,8 +9,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -253,8 +255,8 @@ public class CarrinhoFragment extends Fragment {
 
             }
         });
-/*
-        adapterCarrinho.setOnItemClickListener(new AdapterCarrinho.OnItemClickListener() {
+
+        /*adapterCarrinho.setOnItemClickListener(new AdapterCarrinho.OnItemClickListener() {
             @Override
             public void onItemCLick(int position) {
 
@@ -266,7 +268,7 @@ public class CarrinhoFragment extends Fragment {
                 CarrinhoFragment.this.onDeleteClick(position);
             }
         });
-
+        */
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallBack= new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
             @Override
@@ -280,15 +282,10 @@ public class CarrinhoFragment extends Fragment {
                 itemCarrinhos.remove(viewHolder.getAdapterPosition());
                 adapterCarrinho.notifyDataSetChanged();
 
-
-
             }
         };
 
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(mRecyclerCarrinho);
-
-
-*/
 
 
         return v;

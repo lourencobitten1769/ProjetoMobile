@@ -2,12 +2,12 @@ package com.example.projetomobile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.view.inputmethod.EditorInfo;
+import android.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -40,7 +40,6 @@ public class InicialFragment extends Fragment implements AdapterTypeHoriz.OnItem
     private AdapterProdutos adapterProdutos;
     private RecyclerView.LayoutManager layoutManager;
     List<Product> products=new ArrayList<>();
-    EditText edtProcurar;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -101,7 +100,23 @@ public class InicialFragment extends Fragment implements AdapterTypeHoriz.OnItem
 
         horizontal_recycler=view.findViewById(R.id.horizontal_recycler);
 
-        edtProcurar=view.findViewById(R.id.edtProcurar);
+        SearchView searchView= view.findViewById(R.id.searchView);
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchView.requestFocus();
+                adapterProdutos.getFilter().filter(newText);
+                return false;
+            }
+        });
+
 
 
         dbHelper= new DBHelper(getActivity());
