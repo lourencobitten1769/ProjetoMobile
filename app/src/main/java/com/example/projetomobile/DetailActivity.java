@@ -1,5 +1,8 @@
 package com.example.projetomobile;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +34,9 @@ public class DetailActivity extends AppCompatActivity {
     ImageView imageView;
     Spinner spinnerStock;
     Button btnAdicionarCarrinho;
+    Button btnOk;
+    Dialog dialog;
+
     int quantidade=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,7 @@ public class DetailActivity extends AppCompatActivity {
         imageView=findViewById(R.id.ivProduto);
         spinnerStock=findViewById(R.id.spinnerStock);
         btnAdicionarCarrinho=findViewById(R.id.btnAdicionar);
+        dialog=new Dialog(this);
 
         Product product= (Product) getIntent().getSerializableExtra("product");
         txtProduto.setText(product.getProduct_name());
@@ -86,6 +93,8 @@ public class DetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
+                        openSucessDialog();
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -104,6 +113,37 @@ public class DetailActivity extends AppCompatActivity {
                 };
 
                 requestQueue.add(stringRequest);
+            }
+        });
+    }
+
+    private void openSucessDialog(){
+        dialog.setContentView(R.layout.addtocart_checked_layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        btnOk=dialog.findViewById(R.id.btnChecked_sucess);
+        dialog.show();
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void openErrorDialog()
+    {
+        dialog.setContentView(R.layout.addtocart_error_layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        btnOk=dialog.findViewById(R.id.btnChecked_sucess);
+        dialog.show();
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
             }
         });
     }

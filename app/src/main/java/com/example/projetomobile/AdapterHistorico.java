@@ -63,7 +63,7 @@ class AdapterHistorico extends RecyclerView.Adapter<AdapterHistorico.HistoricoVi
         Purchase currentItem=mPurchases.get(position);
 
         holder.mHTitulo.setText(String.valueOf(currentItem.getDate()));
-        holder.mHPreco.setText(String.valueOf(currentItem.getTotal_price()));
+        holder.mHPreco.setText(String.valueOf(currentItem.getTotal_price()) + "€");
 
 
     }
