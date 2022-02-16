@@ -57,7 +57,7 @@ class AdapterHistoricoDetail extends RecyclerView.Adapter<AdapterHistoricoDetail
         this.mListener=listener;
     }
 
-    public AdapterHistoricoDetail(ArrayList<ProductPurchase> purchases, Context context)
+    public AdapterHistoricoDetail(Context context,ArrayList<ProductPurchase> purchases)
     {
         mPurchasesDetail=purchases;
         dbHelper=new DBHelper(context);

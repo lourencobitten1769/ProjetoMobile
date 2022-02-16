@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,6 +96,8 @@ class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ProdutosViewh
         holder.title.setText(products.get(position).getProduct_name());
         holder.preco.setText(String.valueOf(products.get(position).getPrice()) + "€");
         //holder.gridImage.setImageResource(products.get(position).getImage());
+
+        Glide.with(context).load("http://10.0.2.2/projetoweb/frontend/web/images/" + products.get(position).getImage()).into(holder.gridImage);
     }
 
     @Override

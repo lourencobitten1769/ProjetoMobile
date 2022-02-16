@@ -495,7 +495,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return productPurchases;
     }
 
-    public LinkedList<ProductPurchase> getProductPurchasesByPurchase(int purchaseID) throws ParseException {
+    public LinkedList<ProductPurchase> getProductPurchasesByPurchase(int purchaseID) {
         LinkedList<ProductPurchase> productPurchases = new LinkedList<>();
         Cursor cursor = this.database.rawQuery("SELECT * FROM productspurchases where purchase_id=" + purchaseID,
                 null);
@@ -512,6 +512,12 @@ public class DBHelper extends SQLiteOpenHelper {
         return productPurchases;
     }
 
+
+    public void removerAllProductsPurchases(){
+        this.database.delete("productspurchases",null,null);
+    }
+    //-------------------------------//END OF PURCHASE METHOD//-------------------------------------
+    //-------------------------------//CARTITEMS METHOD//-------------------------------------
 
 
 

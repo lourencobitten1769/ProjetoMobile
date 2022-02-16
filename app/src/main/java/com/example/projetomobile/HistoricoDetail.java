@@ -17,7 +17,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 
 public class HistoricoDetail extends AppCompatActivity {
@@ -27,6 +26,7 @@ public class HistoricoDetail extends AppCompatActivity {
     private RecyclerView rv_historicoDetail;
     private RecyclerView.LayoutManager layoutManager;
     ArrayList<ProductPurchase> productPurchases=new ArrayList<>();
+    AdapterHistoricoDetail adapterHistoricoDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +39,14 @@ public class HistoricoDetail extends AppCompatActivity {
         rv_historicoDetail=findViewById(R.id.rvHistoricoDetail);
 
 
+        if(LoginActivity.isInternetConnection(this)){
+            dbHelper.removerAllProductsPurchases();
+        }
+
 
         RequestQueue requestQueue= Volley.newRequestQueue(this);
         String url ="http://10.0.2.2/projetoweb/backend/web/index.php/api/productspurchases";
+
 
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -59,7 +64,16 @@ public class HistoricoDetail extends AppCompatActivity {
                         productPurchase.setQuantity(jsonObject.getInt("quantity"));
 
                         dbHelper.adicionarProductPurchase(productPurchase);
+
+
                     }
+
+                    productPurchases.addAll(dbHelper.getProductPurchasesByPurchase(id));
+                    Log.d("test","teste");
+                    adapterHistoricoDetail = new AdapterHistoricoDetail(HistoricoDetail.this,productPurchases);
+                    rv_historicoDetail.setAdapter(adapterHistoricoDetail);
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -74,16 +88,10 @@ public class HistoricoDetail extends AppCompatActivity {
 
         requestQueue.add(jsonArrayRequest);
 
-        try {
-            productPurchases.addAll(dbHelper.getProductPurchasesByPurchase(id));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         layoutManager=new LinearLayoutManager(this);
-        AdapterHistoricoDetail adapterHistoricoDetail = new AdapterHistoricoDetail(productPurchases, this);
         rv_historicoDetail.setLayoutManager(layoutManager);
-        rv_historicoDetail.setAdapter(adapterHistoricoDetail);
+
 
     }
 }

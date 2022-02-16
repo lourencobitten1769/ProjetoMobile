@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ import java.util.Map;
 public class DetailActivity extends AppCompatActivity {
 
     TextView txtProduto,txtDescricao;
+    ImageView imageView;
     Spinner spinnerStock;
     Button btnAdicionarCarrinho;
     int quantidade=0;
@@ -35,12 +38,14 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         txtProduto=findViewById(R.id.txtProduto);
         txtDescricao=findViewById(R.id.txtDescricao);
+        imageView=findViewById(R.id.ivProduto);
         spinnerStock=findViewById(R.id.spinnerStock);
         btnAdicionarCarrinho=findViewById(R.id.btnAdicionar);
 
         Product product= (Product) getIntent().getSerializableExtra("product");
         txtProduto.setText(product.getProduct_name());
         txtDescricao.setText(product.getDescription());
+        Glide.with(this).load("http://10.0.2.2/projetoweb/frontend/web/images/" + product.getImage()).into(imageView);
 
         List<Integer> list= new ArrayList<>();
 

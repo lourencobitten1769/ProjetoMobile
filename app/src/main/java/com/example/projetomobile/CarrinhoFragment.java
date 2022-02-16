@@ -54,7 +54,7 @@ public class CarrinhoFragment extends Fragment {
     Button btnCheckout;
     DBHelper dbHelper;
     int total=0;
-    int ultimoid;
+    int ultimoid=0;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -210,7 +210,7 @@ public class CarrinhoFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             Log.d("ultimoid", String.valueOf(response.getInt("purchase_id")));
-                            ultimoid=response.getInt("purchase_id");
+                            ultimoid=response.getInt("purchase_id") + 1;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -236,7 +236,7 @@ public class CarrinhoFragment extends Fragment {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            Log.d("erro",error.toString());
                         }
                     }){
                         @Override
@@ -257,7 +257,8 @@ public class CarrinhoFragment extends Fragment {
             }
         });
 
-        adapterCarrinho.setOnItemClickListener(new AdapterCarrinho.OnItemClickListener() {
+
+        /*adapterCarrinho.setOnItemClickListener(new AdapterCarrinho.OnItemClickListener() {
             @Override
             public void onItemCLick(int position) {
 
@@ -269,7 +270,7 @@ public class CarrinhoFragment extends Fragment {
                 CarrinhoFragment.this.onDeleteClick(position);
             }
         });
-
+*/
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallBack= new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
             @Override
@@ -280,6 +281,7 @@ public class CarrinhoFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
+                //onDeleteClick(viewHolder.getAdapterPosition());
                 itemCarrinhos.remove(viewHolder.getAdapterPosition());
                 adapterCarrinho.notifyDataSetChanged();
 
