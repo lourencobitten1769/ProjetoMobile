@@ -11,8 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.os.Handler;
+
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -42,6 +45,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import pl.droidsonroids.gif.GifImageView;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CarrinhoFragment#newInstance} factory method to
@@ -60,6 +65,9 @@ public class CarrinhoFragment extends Fragment {
     int ultimoid=0;
     Dialog dialog;
     Button btnOk;
+    ImageView sucess;
+    GifImageView gifLoading;
+
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -125,7 +133,8 @@ public class CarrinhoFragment extends Fragment {
         txtTotal=v.findViewById(R.id.txtHPreco);
         btnCheckout=v.findViewById(R.id.btnCheckout);
         dialog=new Dialog(getContext());
-
+        sucess=v.findViewById(R.id.imgSucess);
+        gifLoading=v.findViewById(R.id.gifLoading);
 
         if(LoginActivity.isInternetConnection(getActivity())){
             dbHelper.removerAllCart();
@@ -187,11 +196,14 @@ public class CarrinhoFragment extends Fragment {
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2/projetoweb/backend/web/index.php/api/purchase", new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("purchase","Purchase add Successfully");
+                        //Log.d("purchase","Purchase add Successfully");
+
+                            openSucessDialog();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        openErrorDialog();
 
                     }
                 }){
@@ -237,12 +249,12 @@ public class CarrinhoFragment extends Fragment {
                     StringRequest stringRequestProductsPurchases= new StringRequest(Request.Method.POST, "http://10.0.2.2/projetoweb/backend/web/index.php/api/productspurchases", new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.d("productPurchase","ProductPurchase added successfully");
+                            //Log.d("productPurchase","ProductPurchase added successfully");
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.d("erro",error.toString());
+                            //Log.d("erro",error.toString());
                         }
                     }){
                         @Override
@@ -303,11 +315,22 @@ public class CarrinhoFragment extends Fragment {
 
     public void openSucessDialog(){
 
-        dialog.setContentView(R.layout.registersucess_layout);
+
+        dialog.setContentView(R.layout.purchasesucess_layout);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         btnOk=dialog.findViewById(R.id.btnChecked_sucess);
         dialog.show();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                gifLoading.setVisibility(View.INVISIBLE);
+                sucess.setVisibility(View.VISIBLE);            }
+        }, 5000);
+
+
+
 
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -320,7 +343,7 @@ public class CarrinhoFragment extends Fragment {
 
     public void openErrorDialog(){
 
-        dialog.setContentView(R.layout.registersucess_layout);
+        dialog.setContentView(R.layout.purchasseerror_layout);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         btnOk=dialog.findViewById(R.id.btnChecked_sucess);
