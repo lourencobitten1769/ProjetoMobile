@@ -142,6 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Intent intent= new Intent(LoginActivity.this,MainActivity.class);
                                     intent.putExtras(bundle);
                                     startActivity(intent);
+                                    finish();
 
                                 } catch (Exception ex) {
                                 }

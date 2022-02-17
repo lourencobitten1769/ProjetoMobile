@@ -43,7 +43,7 @@
         <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/activity_detail.xml" value="0.33" />
         <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/activity_register.xml" value="0.2658514492753623" />
+        <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/activity_register.xml" value="0.33" />
         <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/addtocart_checked_layout.xml" value="0.3532608695652174" />
         <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/addtocart_error_layout.xml" value="0.3532608695652174" />
         <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/custom_grid_layout.xml" value="0.33" />
@@ -53,6 +53,10 @@
         <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/item_carrinho.xml" value="0.3473731884057971" />
         <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/item_historico.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/item_type.xml" value="0.33" />
+        <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/purchasesucess_layout.xml" value="0.3500905797101449" />
+        <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/purchasseerror_layout.xml" value="0.3500905797101449" />
+        <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/registererror_layout.xml" value="0.3500905797101449" />
+        <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/layout/registersucess_layout.xml" value="0.3500905797101449" />
         <entry key="..\:/Users/tomas/AndroidStudioProjects/ProjetoMobile/app/src/main/res/menu/navigation_menu.xml" value="0.36666666666666664" />
       </map>
     </option>

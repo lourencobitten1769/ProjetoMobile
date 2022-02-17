@@ -1,5 +1,8 @@
 package com.example.projetomobile;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +25,9 @@ import java.util.Map;
 public class RegisterActivity extends AppCompatActivity {
 
     EditText edtName,edtEmail,edtMorada,edtNif,edtPassword,edtConfirmPassword;
-    Button btnRegistar;
+    Button btnRegistar, btnOk;
+    Dialog dialog;
+
 
     String username,email,morada,nif,password;
 
@@ -37,6 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
         edtPassword=findViewById(R.id.edtPassword);
         edtConfirmPassword=findViewById(R.id.edtConfirmPassword);
         btnRegistar=findViewById(R.id.btnRegistar);
+        dialog=new Dialog(this);
+
 
         RequestQueue requestQueue=Volley.newRequestQueue(this);
 
@@ -52,12 +59,16 @@ public class RegisterActivity extends AppCompatActivity {
                 StringRequest stringRequest= new StringRequest(Request.Method.POST, "http://10.0.2.2/projetoweb/backend/web/index.php/api/user/register", new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println(response);
+                        //System.out.println(response);
+
+                        openSucessDialog();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Erro", error.toString());
+
+                        openErrorDialog();
                     }
                 }){
                     @Override
@@ -75,5 +86,40 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void openSucessDialog(){
+
+        dialog.setContentView(R.layout.registersucess_layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        btnOk=dialog.findViewById(R.id.btnChecked_sucess);
+        dialog.show();
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    private void openErrorDialog(){
+
+        dialog.setContentView(R.layout.registererror_layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        btnOk=dialog.findViewById(R.id.btnChecked_sucess);
+        dialog.show();
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
     }
 }

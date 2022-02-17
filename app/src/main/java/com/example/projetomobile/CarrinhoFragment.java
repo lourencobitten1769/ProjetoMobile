@@ -1,7 +1,10 @@
 package com.example.projetomobile;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,6 +58,8 @@ public class CarrinhoFragment extends Fragment {
     DBHelper dbHelper;
     int total=0;
     int ultimoid=0;
+    Dialog dialog;
+    Button btnOk;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -119,6 +124,7 @@ public class CarrinhoFragment extends Fragment {
 
         txtTotal=v.findViewById(R.id.txtHPreco);
         btnCheckout=v.findViewById(R.id.btnCheckout);
+        dialog=new Dialog(getContext());
 
 
         if(LoginActivity.isInternetConnection(getActivity())){
@@ -295,6 +301,39 @@ public class CarrinhoFragment extends Fragment {
     }
 
 
+    public void openSucessDialog(){
+
+        dialog.setContentView(R.layout.registersucess_layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        btnOk=dialog.findViewById(R.id.btnChecked_sucess);
+        dialog.show();
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    public void openErrorDialog(){
+
+        dialog.setContentView(R.layout.registersucess_layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        btnOk=dialog.findViewById(R.id.btnChecked_sucess);
+        dialog.show();
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+    }
 
     public void onDeleteClick(int position){
 
