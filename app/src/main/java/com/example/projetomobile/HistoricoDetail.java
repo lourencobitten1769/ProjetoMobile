@@ -68,6 +68,7 @@ public class HistoricoDetail extends AppCompatActivity {
 
                     }
 
+
                     productPurchases.addAll(dbHelper.getProductPurchasesByPurchase(id));
                     Log.d("test","teste");
                     adapterHistoricoDetail = new AdapterHistoricoDetail(HistoricoDetail.this,productPurchases);

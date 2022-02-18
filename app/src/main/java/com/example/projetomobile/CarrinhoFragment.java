@@ -14,8 +14,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.os.Handler;
-
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -45,7 +43,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import pl.droidsonroids.gif.GifImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,7 +63,6 @@ public class CarrinhoFragment extends Fragment {
     Dialog dialog;
     Button btnOk;
     ImageView sucess;
-    GifImageView gifLoading;
 
 
 
@@ -134,7 +130,6 @@ public class CarrinhoFragment extends Fragment {
         btnCheckout=v.findViewById(R.id.btnCheckout);
         dialog=new Dialog(getContext());
         sucess=v.findViewById(R.id.imgSucess);
-        gifLoading=v.findViewById(R.id.gifLoading);
 
         if(LoginActivity.isInternetConnection(getActivity())){
             dbHelper.removerAllCart();
@@ -229,6 +224,34 @@ public class CarrinhoFragment extends Fragment {
                         try {
                             Log.d("ultimoid", String.valueOf(response.getInt("purchase_id")));
                             ultimoid=response.getInt("purchase_id") + 1;
+
+                            for (int k=0;k< itemCarrinhos.size();k++){
+                                int finalK = k;
+                                StringRequest stringRequestProductsPurchases= new StringRequest(Request.Method.POST, "http://10.0.2.2/projetoweb/backend/web/index.php/api/productspurchases", new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        Log.d("productPurchase","ProductPurchase added successfully");
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        //Log.d("erro",error.toString());
+                                    }
+                                }){
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String,String> map= new HashMap<>();
+                                        map.put("product_id", String.valueOf(itemCarrinhos.get(finalK).getProduct_id()));
+                                        map.put("purchase_id", String.valueOf(ultimoid));
+                                        map.put("quantity",String.valueOf(itemCarrinhos.get(finalK).getQuantity()));
+                                        return map;
+                                    }
+                                };
+
+                                RequestQueue requestQueueAddProductsPurchases=Volley.newRequestQueue(getContext());
+                                requestQueueAddProductsPurchases.add(stringRequestProductsPurchases);
+
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -244,34 +267,26 @@ public class CarrinhoFragment extends Fragment {
                 requestQueueLastPurchase.add(jsonObjectRequestLastPurchase);
 
 
-                for (int k=0;k< itemCarrinhos.size();k++){
-                    int finalK = k;
-                    StringRequest stringRequestProductsPurchases= new StringRequest(Request.Method.POST, "http://10.0.2.2/projetoweb/backend/web/index.php/api/productspurchases", new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            //Log.d("productPurchase","ProductPurchase added successfully");
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //Log.d("erro",error.toString());
-                        }
-                    }){
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String,String> map= new HashMap<>();
-                            map.put("product_id", String.valueOf(itemCarrinhos.get(finalK).getProduct_id()));
-                            map.put("purchase_id", String.valueOf(ultimoid));
-                            map.put("quantity",String.valueOf(itemCarrinhos.get(finalK).getQuantity()));
-                            return map;
-                        }
-                    };
 
-                    RequestQueue requestQueueAddProductsPurchases=Volley.newRequestQueue(getContext());
-                    requestQueueAddProductsPurchases.add(stringRequestProductsPurchases);
 
-                }
+                String urlDelete= "http://10.0.2.2/projetoweb/backend/web/index.php/api/cart/deletecartuser/"+userid;
 
+                Log.d("eliminacao",urlDelete);
+
+                StringRequest stringRequestDeleteFromCart= new StringRequest(Request.Method.DELETE, urlDelete, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("eliminacao","Eliminado do Carrinho");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("eliminacao",error.toString());
+                    }
+                });
+
+                RequestQueue requestQueueDeleteFromCart=Volley.newRequestQueue(getContext());
+                requestQueueDeleteFromCart.add(stringRequestDeleteFromCart);
             }
         });
 
@@ -321,15 +336,6 @@ public class CarrinhoFragment extends Fragment {
 
         btnOk=dialog.findViewById(R.id.btnChecked_sucess);
         dialog.show();
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                gifLoading.setVisibility(View.INVISIBLE);
-                sucess.setVisibility(View.VISIBLE);            }
-        }, 5000);
-
-
 
 
         btnOk.setOnClickListener(new View.OnClickListener() {

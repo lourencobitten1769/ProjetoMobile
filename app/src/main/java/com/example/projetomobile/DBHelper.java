@@ -504,8 +504,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 ProductPurchase productPurchase=new ProductPurchase();
                 productPurchase.setProductPurchase_id(cursor.getInt(0));
                 productPurchase.setProduct_id(cursor.getInt(1));
-                productPurchase.setPurchase_id(cursor.getInt(2));
-                productPurchase.setQuantity(cursor.getInt(3));
+                productPurchase.setQuantity(cursor.getInt(2));
+                productPurchase.setPurchase_id(cursor.getInt(3));
                 productPurchases.add(productPurchase);
             }while(cursor.moveToNext());
         }
